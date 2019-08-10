@@ -9,12 +9,11 @@ class Cell:
         self.clicked = True
         return self.state
 
-
 class Board:
-    def __init__(self):
-        self.rows = 20  # number of rows in the game
-        self.cols = 30  # number of cols in the game
-        self.num_mines = 25  # number of mines in the game
+    def __init__(self, r, c, m):
+        self.rows = r  # number of rows in the game
+        self.cols = c  # number of cols in the game
+        self.num_mines = m  # number of mines in the game
         self.cells = None  # 2d dictionary that contains all cells of the game.
 
     def init_board(self):
