@@ -5,7 +5,7 @@ class Cell:
     def __init__(self):
         self.state = False  # if there is a mine in this cell.
         self.clicked = False  # if user have clicked to this cell.
-        self.val = 9  # number of cells which contain mine in the neighbourhood.
+        self.val = -1  # number of cells which contain mine in the neighbourhood.
 
     def get_state(self):
         # tests if this cell contains mine or not, if it does return True else return False.
@@ -25,10 +25,11 @@ class Board:
         self.rows = r  # number of rows in the game
         self.cols = c  # number of cols in the game
         self.num_mines = m  # number of mines in the game
-        self.cells_dict = {}  # 2d dictionary that contains all cells of the game.
+        self.cells_dict = {}    # 2d dictionary that contains all cells of the game.
+                                # It is a dictionary as lookup time is O(1)
 
     def init_board(self):
-        # initialize the board by creating a 2d dictionary self.cells of dimensions rows and columns.
+        # initialize the board by creating a 2d dictionary self.cells_dict of dimensions rows and columns.
         # for each element in the dictionary it creates a cell object and assign appropriate values.
         for i in range(self.rows):
             self.cells_dict[i] = {}
@@ -37,7 +38,7 @@ class Board:
                 self.cells_dict[i][j] = Cell()
 
     def place_mines(self):
-        # it places self.mines randomly across the whole board and updates the self.cells.
+        # it places self.num_mines randomly uniquely across the whole board and updates the self.cells_dict.
         unique_tuples = []
         while len(unique_tuples) < self.num_mines:
             r_idx = random.randint(0, self.rows - 1)
@@ -67,38 +68,15 @@ class Board:
         return total_bombs
 
     def eval_nums(self):
-
-        # for each cell it calculates the number of bombs in the neighboring cells and updates the self.cells
+        # for each cell it calculates the number of bombs in the neighboring cells and updates the self.cells_dict
         for i in range(self.rows):
             for j in range(self.cols):
                 if not self.cells_dict[i][j].get_state():
                     total_bombs = self.count_bombs_in_nbr(i, j)
                     self.cells_dict[i][j].val = total_bombs
 
-    def display_board_dbg(self):
-        # it displays the whole board to CLI.
-
-        # for j in range(self.cols):
-        #     if j < self.cols - 1:
-        #         print(j+1, end="|")
-        #     else:
-        #         print(j+1)
-
-        for i in range(self.rows):
-            for j in range(self.cols):
-
-                # val_to_print = "_"
-                # if self.cells_dict[i][j].clicked:
-                val_to_print = str(self.cells_dict[i][j].val)
-                if self.cells_dict[i][j].get_state():
-                    val_to_print = '*'
-                if j < self.cols - 1:
-                    print(val_to_print, end="|")
-                else:
-                    print(val_to_print)
-
     def display_board(self, over=False):
-        # it displays the whole board to CLI.
+        # it displays the whole board to CLI. If over, then displays the values of cells.
         print()
         print(str('   ').rjust(2, ' '), end=" ")
         for j in range(self.cols):
@@ -128,21 +106,15 @@ class Board:
                     print(toprint)
 
     def handle_clicking(self, r, c):
-        # if self.cells_dict[r][c].get_clicked():
-        #     # already clicked so do nothing
-        #     pass
-        # elif self.cells_dict[r][c].get_state():
-        #     # cell contains mine so game over.
-        #     return -1
-        # else:
-            # open the cell
-            self.cells_dict[r][c].set_clicked(v = True)
-            # return 0
+        # opens the cell
+        self.cells_dict[r][c].set_clicked(v = True)
 
     def get_game_status(self):
+        # Checks the status of the game.
         # -1 over and failed
-        # 0 no status, game should continue
+        # 0 no status, game should be continued
         # 1 user won the game
+
         flag = False # True if non-mined cell is un-clicked
         for i in range(self.rows):
             for j in range(self.cols):

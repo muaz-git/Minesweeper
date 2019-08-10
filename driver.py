@@ -10,6 +10,7 @@ class Driver:
         self.board_initialization()
 
     def board_initialization(self):
+        # initializes the board, places the mines and pre-evaluate the numbers of neigbouring mines in each cell.
         self.board = Board(r=self.rows, c=self.cols, m=self.mines)
 
         self.board.init_board()
@@ -18,7 +19,7 @@ class Driver:
         # self.board.display_board_dbg()
 
     def get_verify_input(self):
-
+        # Makes sure that input is a valid integer and in the limits.
         while True:
             try:
                 r = int(input("Enter row in [1, {}]: ".format(self.rows)))
@@ -60,6 +61,6 @@ class Driver:
 
 if __name__ == '__main__':
     print("*" * 50)
-    d = Driver(r=20, c=30, m=25)
+    d = Driver(r=4, c=4, m=4)
     d.main_loop()
     print("*" * 50)
