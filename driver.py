@@ -3,9 +3,9 @@ from utils import Board
 
 class Driver:
     def __init__(self):
-        self.rows = 20
-        self.cols = 30
-        self.mines = 25
+        self.rows = 5
+        self.cols = 5
+        self.mines = 4
 
         self.board_initialization()
 
@@ -39,7 +39,7 @@ class Driver:
 
     def main_loop(self):
         print("This Minesweeper has {} rows and {} columns.\n".format(self.rows, self.cols))
-
+        self.board.display_board()
         # r, c = self.get_verify_input()
         # while True:
         #     pass
